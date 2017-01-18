@@ -104,6 +104,11 @@ KVPair create_kvp(void *key, void *val, char hint[], size_t key_size, size_t val
 	return kvp;
 }
 
+void empty_kvp(KVPair *kvp) {
+	free(kvp->val);
+	memset(kvp, 0, sizeof(KVPair));
+}
+
 void insert(Table *t, void *key, void *val, char hint[], size_t key_size, size_t val_size) {
 	// create a permanent KVP memspace
 	KVPair *p_kvp = malloc(sizeof(KVPair));
@@ -152,13 +157,8 @@ void del(Table *t, void *key, size_t key_size) {
 	for (int x = 0; x < BUCK_SIZ; x++) {
 		KVPair *kvp = b->storage[x];
 		if (kvp && (kvp->key == real_hash)) {
-			// the only space we manually allocated
-			// was the permanent storage of the value
-			free(kvp->val);
-			// other code relies on the bucket space
-			// to be NULL'd out, so zero all of it
-			memset(b->storage[x], 0, sizeof(KVPair *));
-			memset(kvp, 0, sizeof(KVPair));
+			empty_kvp(kvp);
+			memset(&b->storage[x], 0, sizeof(KVPair *));
 			// re-nominate this index as open
 			push(&b->open_indices, x);
 		}
