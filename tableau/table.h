@@ -54,13 +54,20 @@ struct _Bucket {
 
 struct _Table {
 	Bucket *storage[INIT_EXP];
+	// keep track of items and size
+	// for load-factor based resizing
+	unsigned long items;
 	unsigned long size;
 };
 
 unsigned long hash(void *key, size_t size);
+
+// table API
 Table  create_table();
 void   insert(Table *t, void *key, void *val, char hint[], size_t key_size, size_t val_size);
 KVPair retrieve(Table *t, void *key, size_t key_size);
 void   del(Table *t, void *key, size_t key_size);
+KVPair *items(Table *t);
+void   destroy(Table *t);
 
 #endif
