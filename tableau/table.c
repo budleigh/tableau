@@ -97,7 +97,6 @@ KVPair create_kvp(void *key, void *val, char hint[], size_t key_size, size_t val
 	kvp.val = malloc(val_size);
 	memcpy(kvp.val, val, val_size);
 
-	kvp.sizeof_key = key_size;
 	kvp.sizeof_val = val_size;
 	// todo: MSFT hates strcpy. figure this out
 	strcpy(kvp.val_type_hint, hint);
