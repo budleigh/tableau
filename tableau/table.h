@@ -28,7 +28,6 @@ so that the table can allocate properly.
 struct _KVPair {
 	unsigned long key;  // hash
 	void *val;
-	unsigned long sizeof_key;
 	unsigned long sizeof_val;
 	char val_type_hint[HINT_SIZ];  // optional
 	int found_flag;
