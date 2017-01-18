@@ -33,12 +33,12 @@ Get the full hash of the given key, then modulo
 it to the size of the given table to get a number
 within the range 0-table_size.
 */
-unsigned long get_hash_for_table(Table *t, void *key, size_t key_size) {
+unsigned long get_hash_for_key(Table *t, void *key, size_t key_size) {
 	return hash(key, key_size) % t->size;
 }
 
 Bucket *get_bucket_for_key(Table *t, void *key, size_t key_size) {
-	unsigned int index = get_hash_for_table(t, key, key_size);
+	unsigned int index = get_hash_for_key(t, key, key_size);
 	Bucket *b = t->storage[index];
 	return b;
 }
@@ -77,6 +77,12 @@ Table create_table() {
 	t.size = INIT_EXP;
 	initialize_storage(&t);
 	return t;
+}
+
+void stretch_table(Table *t) {
+	t->size = t->size * 2;
+	void *old_storage = t->storage;
+	initialize_storage(t);
 }
 
 // this should be simplified greatly by structing the values + their sizes + hints
